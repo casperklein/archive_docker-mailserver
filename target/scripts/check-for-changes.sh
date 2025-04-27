@@ -209,9 +209,25 @@ function _rspamd_changes() {
   fi
 }
 
+# Get filesystem of /tmp/docker-mailserver
+FS=$(mount | grep ' on /tmp/docker-mailserver ' | cut -d ' ' -f 5)
+
+# Use the INOTIFY polling method on supported filesystems; otherwise, fall back to the SLEEP method.
+case "${FS}" in
+  ext*)  POLL_METHOD="INOTIFY" ;;
+  xfs)   POLL_METHOD="INOTIFY" ;;
+  btrfs) POLL_METHOD="INOTIFY" ;;
+  tmpfs) POLL_METHOD="INOTIFY" ;;
+  *)     POLL_METHOD="SLEEP"   ;;
+esac
+
 while true; do
   _check_for_changes
-  sleep "${DMS_CONFIG_POLL:-2}"
+  if [[ ${POLL_METHOD} == "INOTIFY" ]]; then
+    inotifywait -e MODIFY "${CHANGED_FILES[@]}"
+  else
+    sleep "${DMS_CONFIG_POLL:-2}"
+  fi
 done
 
 exit 0
