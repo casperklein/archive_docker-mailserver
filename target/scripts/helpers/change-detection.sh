@@ -25,7 +25,9 @@ function _monitored_files_checksums() {
   # If a wildcard path pattern (or an empty ENV) would yield an invalid path
   # or no results, `shopt -s nullglob` prevents it from being added.
   shopt -s nullglob
-  declare -a STAGING_FILES CHANGED_FILES
+  declare -a STAGING_FILES
+
+  CHANGED_FILES=()
 
   # Supported user provided configs:
   local DMS_DIR=/tmp/docker-mailserver
