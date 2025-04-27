@@ -115,7 +115,7 @@ function _install_packages() {
 
   local MISCELLANEOUS_PACKAGES=(
     binutils bsd-mailx
-    dbconfig-no-thanks dumb-init iproute2
+    dbconfig-no-thanks dumb-init inotify-tools iproute2
     libdate-manip-perl libldap-common libmail-spf-perl libnet-dns-perl
     locales logwatch netcat-openbsd
     nftables # primarily for Fail2Ban
